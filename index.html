@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Metrics Dashboard</title>
+</head>
+<body>
+  <h1>Real-time Metrics</h1>
+  <div id="metrics"></div>
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onmessage = (event) => {
+      const metric = JSON.parse(event.data);
+      document.getElementById('metrics').innerHTML = `
+        CPU: ${metric.cpu}% | Memory: ${metric.memory}% | Time: ${metric.timestamp}
+      `;
+    };
+  </script>
+</body>
+</html>
