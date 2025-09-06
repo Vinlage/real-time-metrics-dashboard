@@ -9,3 +9,7 @@ variable "sns_topic_name" {
   default     = "metrics-topic"
 }
 
+variable "sqs_queue_name" {
+  type    = string
+  default = "metrics-queue"
+}
