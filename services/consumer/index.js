@@ -21,7 +21,8 @@ async function pollQueue() {
 
   if (data.Messages) {
     data.Messages.forEach(msg => {
-      wsServer.clients.forEach(client => client.send(msg.Body));
+      const message = JSON.parse(msg.Body).Message;
+      wsServer.clients.forEach(client => client.send(message));
       sqs.send(new DeleteMessageCommand({ QueueUrl: process.env.SQS_QUEUE_URL, ReceiptHandle: msg.ReceiptHandle }));
     });
   }
