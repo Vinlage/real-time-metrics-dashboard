@@ -1,6 +1,6 @@
 variable "aws_endpoint" {
   type    = string
-  default = "http://localstack:4566"
+  default = "http://localhost:4566"
 }
 
 variable "sns_topic_name" {
