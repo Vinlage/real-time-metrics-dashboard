@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      retries: 10
+
+  terraform:
+    build: ./terraform
+    depends_on:
+      localstack:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localstack:4566/_localstack/health"]
+      interval: 5s
+      retries: 10
+
+  producer:
+    build: ./services/producer
+    environment:
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+    env_file:
+      - ./services/producer/.env
+    depends_on:
+      terraform:
+        condition: service_completed_successfully
+
+  # subscriber:
+  #   build: ./services/subscriber
+  #   environment:
+  #     - LOCALSTACK_ENDPOINT=http://localstack:4566
+  #   depends_on:
+  #     - localstack
