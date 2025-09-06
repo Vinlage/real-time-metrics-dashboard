@@ -21,9 +21,9 @@ jobs:
         run: npm ci
         working-directory: ./services/consumer
 
-      - name: Install publisher dependencies
+      - name: Install producer dependencies
         run: npm ci
-        working-directory: ./services/publisher
+        working-directory: ./services/producer
 
       - name: Build and start services
         run: docker-compose up -d --build
