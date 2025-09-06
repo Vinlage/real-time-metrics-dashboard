@@ -33,9 +33,11 @@ services:
       terraform:
         condition: service_completed_successfully
 
-  # subscriber:
-  #   build: ./services/subscriber
-  #   environment:
-  #     - LOCALSTACK_ENDPOINT=http://localstack:4566
-  #   depends_on:
-  #     - localstack
+  consumer:
+    build: ./services/consumer
+    environment:
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+      - SQS_QUEUE_URL=http://sqs.us-east-1.localstack.localstack.cloud:4566/000000000000/metrics-queue
+    depends_on:
+      terraform:
+        condition: service_completed_successfully
